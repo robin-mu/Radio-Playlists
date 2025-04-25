@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "rpl_formatter": {
+      "format": "[%(asctime)s] [%(levelname)s] [%(station)s] %(message)s",
+      "defaults": {
+        "station": ""
+      },
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    }
+  },
+  "handlers": {
+    "file": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "level": "INFO",
+      "formatter": "rpl_formatter",
+      "filename": "logs/radio_playlists.log",
+      "maxBytes": 5000000,
+      "backupCount": 5
+    },
+    "tqdm": {
+      "class": "custom_logging.TqdmLoggingHandler",
+      "level": "WARNING",
+      "formatter": "rpl_formatter"
+    }
+  },
+  "loggers": {
+    "root": {
+      "level": "DEBUG",
+      "handlers": ["file", "tqdm"]
+    }
+  }
+}
