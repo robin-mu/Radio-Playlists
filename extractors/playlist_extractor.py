@@ -1,4 +1,3 @@
-import ctypes
 import json
 import logging.config
 import os
@@ -12,6 +11,7 @@ import pandas as pd
 import requests
 from requests import Response
 from tqdm.auto import tqdm
+from wakepy import keep
 
 class PlaylistExtractor:
     logging_config_loaded = False
@@ -79,67 +79,64 @@ class PlaylistExtractor:
                 time.sleep(self.sleep_secs)
                 return req
 
-        ctypes.windll.kernel32.SetThreadExecutionState(0x80000001)
+        with keep.running():
+            log_extra = {'station': station}
 
-        log_extra = {'station': station}
+            progress_bar = progress_bar or tqdm(desc=f'{self.broadcaster}: {station}', file=sys.stdout,
+                                                total=(end - start) // pd.Timedelta(minutes=1), unit='h', unit_scale=60, leave=False,
+                                                bar_format="{desc:<20.20}{percentage:3.0f}%|{bar:40}{r_bar}")
 
-        progress_bar = progress_bar or tqdm(desc=f'{self.broadcaster}: {station}', file=sys.stdout,
-                                            total=(end - start) // pd.Timedelta(minutes=1), unit='h', unit_scale=60, leave=False,
-                                            bar_format="{desc:<20.20}{percentage:3.0f}%|{bar:40}{r_bar}")
+            # Downloading
+            new_files: list[str] = []
 
-        # Downloading
-        new_files: list[str] = []
+            present_files = glob.glob(f'raw/{self.broadcaster}_{station}_*')
+            if present_files:
+                newest_date = pd.to_datetime(max(present_files).split('_')[-1].split('.')[0], format='%Y%m%d-%H%M%S').floor('1d') - pd.Timedelta(days=1)
+            else:
+                newest_date = pd.Timestamp.now()
 
-        present_files = glob.glob(f'raw/{self.broadcaster}_{station}_*')
-        if present_files:
-            newest_date = pd.to_datetime(max(present_files).split('_')[-1].split('.')[0], format='%Y%m%d-%H%M%S').floor('1d') - pd.Timedelta(days=1)
-        else:
-            newest_date = pd.Timestamp.now()
+            prev_t = None
+            for t in self.get_times(start, end, station):
+                if prev_t is None:
+                    prev_t = t
 
-        prev_t = None
-        for t in self.get_times(start, end, station):
-            if prev_t is None:
+                filepath = os.path.join('raw', f'{self.broadcaster}_{station}_{t.strftime("%Y%m%d-%H%M%S")}.{self.file_extension}')
+                if os.path.isfile(filepath) and t < newest_date:
+                    status_msg = f'File for {t} is already present at {filepath}'
+                else:
+                    request_timer = timer()
+                    req = try_post()
+                    with open(filepath, 'wb') as f:
+                        f.write(req.content)
+
+                    status_msg = f'Downloaded data from {t} ({timer() - request_timer - self.sleep_secs:.3f}s)'
+                    progress_bar.set_postfix_str(status_msg)
+
+                new_files.append(filepath)
+                self.logger.info(status_msg, extra=log_extra)
+
+                try:
+                    progress_bar.update(abs(t - prev_t) // pd.Timedelta(minutes=1))
+                except TypeError as e:  # if n > total, tqdm will throw a TypeError
+                    self.logger.error(f"Exception while updating the progress bar: {e}", extra=log_extra)
+                    progress_bar.total = progress_bar.n
+                    progress_bar.refresh()
+
                 prev_t = t
 
-            filepath = os.path.join('raw', f'{self.broadcaster}_{station}_{t.strftime("%Y%m%d-%H%M%S")}.{self.file_extension}')
-            if os.path.isfile(filepath) and t < newest_date:
-                status_msg = f'File for {t} is already present at {filepath}'
-            else:
-                request_timer = timer()
-                req = try_post()
-                with open(filepath, 'wb') as f:
-                    f.write(req.content)
+            # Extracting
+            pages = []
+            for path in new_files:
+                date = pd.to_datetime(path.split('_')[-1].split('.')[0], format='%Y%m%d-%H%M%S')
+                with open(path, 'rb') as f:
+                    file = f.read()
 
-                status_msg = f'Downloaded data from {t} ({timer() - request_timer - self.sleep_secs:.3f}s)'
+                extracted = self.extract(station, file, date)
+                pages.append(extracted)
+
+                status_msg = f'Extracted data from {path} - {len(extracted)} elements found'
                 progress_bar.set_postfix_str(status_msg)
-
-            new_files.append(filepath)
-            self.logger.info(status_msg, extra=log_extra)
-
-            try:
-                progress_bar.update(abs(t - prev_t) // pd.Timedelta(minutes=1))
-            except TypeError as e:  # if n > total, tqdm will throw a TypeError
-                self.logger.error(f"Exception while updating the progress bar: {e}", extra=log_extra)
-                progress_bar.total = progress_bar.n
-                progress_bar.refresh()
-
-            prev_t = t
-
-        # Extracting
-        pages = []
-        for path in new_files:
-            date = pd.to_datetime(path.split('_')[-1].split('.')[0], format='%Y%m%d-%H%M%S')
-            with open(path, 'rb') as f:
-                file = f.read()
-
-            extracted = self.extract(station, file, date)
-            pages.append(extracted)
-
-            status_msg = f'Extracted data from {path} - {len(extracted)} elements found'
-            progress_bar.set_postfix_str(status_msg)
-            self.logger.info(status_msg, extra=log_extra)
-
-        ctypes.windll.kernel32.SetThreadExecutionState(0x80000000)
+                self.logger.info(status_msg, extra=log_extra)
 
         if not pages:
             return pd.DataFrame()

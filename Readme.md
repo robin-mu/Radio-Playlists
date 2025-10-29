@@ -29,3 +29,4 @@ For logging, you can use the logger object `self.logger` which is defined in the
 - beautifulsoup4: For extracting playlist information from html files
 - pandas: For managing playlist databases
 - tqdm: For pretty progress bars
+- wakepy: To keep the system awake while updating (OS independent)
