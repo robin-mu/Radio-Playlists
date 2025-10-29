@@ -15,7 +15,7 @@ class SwrExtractor(PlaylistExtractor):
                          'dasding': 'https://www.dasding.de/03-playlistsuche/index.html'}
 
     def get_times(self, start, end, station) -> pd.DatetimeIndex:
-        return pd.date_range(start, end, freq='10min') if station == 'dasding' else pd.date_range(start, end, freq='1h')
+        return pd.date_range(start, end, freq='1h')
 
     def get_url(self, station: str, time):
         date = time.strftime('%Y-%m-%d')
@@ -33,8 +33,8 @@ class SwrExtractor(PlaylistExtractor):
             return pd.DataFrame()
 
         df = pd.DataFrame({
-            'artist': [e.text.strip() for e in soup.find_all('dd', class_='playlist-item-song')],
-            'title': [e.text.strip() for e in soup.find_all('dd', class_='playlist-item-artist')]
+            'title': [e.text.strip() for e in soup.find_all('dd', class_='playlist-item-song')],
+            'artist': [e.text.strip() for e in soup.find_all('dd', class_='playlist-item-artist')]
         }, index=pd.Series(data=pd.to_datetime([e['datetime'] for e in soup.find_all('time')], format='%Y-%m-%dT%H:%M'), name='time'),
            dtype=str)
 

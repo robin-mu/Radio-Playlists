@@ -12,7 +12,6 @@ class MdrExtractor(PlaylistExtractor):
         self.oldest_timestamp = pd.Timedelta(days=366)
         self.file_extension = 'json'
         self.stations = {'jump': 1,
-                         'aktuell': 2,
                          'sputnik': 3,
                          'sachsen': 4,
                          'sachsen-anhalt': 5,

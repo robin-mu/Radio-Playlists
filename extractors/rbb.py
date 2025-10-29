@@ -1,8 +1,8 @@
+import time
+
 import pandas as pd
 from bs4 import BeautifulSoup
 from six import StringIO
-import time
-import json
 
 from extractors.playlist_extractor import PlaylistExtractor
 
@@ -12,8 +12,8 @@ class RbbExtractor(PlaylistExtractor):
         super().__init__(log, sleep_secs)
         self.times = None
         self.broadcaster = 'rbb'
-        self.oldest_timestamp = {'888': pd.Timestamp(2023, 1, 1),
-                                 'antenne-brandenburg': pd.Timestamp(2023, 1, 1),
+        self.oldest_timestamp = {'888': pd.Timestamp(2025, 5, 1),
+                                 'antenne-brandenburg': pd.Timestamp(2025, 5, 1),
                                  'fritz': pd.Timestamp(2019, 1, 1),
                                  'radioeins': pd.Timestamp(2022, 3, 21),
                                  'radiodrei': pd.Timestamp(2023, 1, 1)}
