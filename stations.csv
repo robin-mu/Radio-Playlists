@@ -1,0 +1,70 @@
+Broadcaster,Storage duration,Data per request,Request format,Response format,Station,Link,Comment
+NDR,60 days (exactly),1 hour,GET with date and hour in address,HTML,NDR1 Niedersachsen,"https://www.ndr.de/ndr1niedersachsen/programm/titelliste-ndr-1-niedersachsen,radioplaylist-ndr1niedersachsen-100.html?date=2025-08-30&hour=15",
+,,,,,NDR2,"https://www.ndr.de/ndr2/programm/ndr2-playlist,radioplaylist-ndr2-100.html?date=2025-10-29&hour=15",
+,,,,,NDR Kultur,"https://www.ndr.de/kultur/programm/titelliste-ndr-kultur,ndrkultur-titelliste-100.html",Classical (more metadata)
+,,,,,NDR Welle Nord,"https://www.ndr.de/wellenord/programm/titelliste-ndr-1-welle-nord,radioplaylist-wellennord-100.html?date=2025-08-30&hour=15",
+,,,,,NDR Radio MV,"https://www.ndr.de/radiomv/programm/titelliste-ndr-1-radio-mv,radioplaylist-radiomv-100.html?date=2025-08-30&hour=15",
+,,,,,NDR 90.3,"https://www.ndr.de/903/programm/titelliste-ndr-903,radioplaylist-neunzigdrei-100.html?date=2025-10-29&hour=15",
+,,,,,N-JOY,"https://www.ndr.de/n-joy/musik/n-joy-playlist,radioplaylist-njoy-100.html?date=2025-10-29&hour=15",
+,,,,,NDR Blue,"https://www.ndr.de/ndrblue/programm/ndr-blue-titelliste,radioplaylist-ndrblue-100.html?date=2025-10-29&hour=15",
+,,,,,NDR Schlager,"https://www.ndr.de/ndrschlager/programm/titelliste-ndr-schlager,radioplaylist-ndrschlager-100.html?date=2025-10-29&hour=15",
+hr,14 days (rounded down to 00:00),1 hour,GET with date and hour in address,HTML,hr1,https://www.hr1.de/titelliste/playlist_hrone-100~inline_date-2024-06-07_hour-14.html,
+,,,,,hr2-kultur,https://www.hr2.de/hrzwei-playlist-100~inline_date-2024-07-19_hour-10.html,Classical (more metadata)
+,,,,,hr3,https://www.hr3.de/playlist/playlist_hrthree-100~inline_date-2024-07-19_hour-11.html,
+,,,,,hr4,https://www.hr4.de/musik/titelliste/playlist_hrfour-100~inline_date-2024-07-19_hour-10.html,
+,,,,,YOU FM,https://www.you-fm.de/playlists/was-lief-wann/playlist_you-fm-100~inline_date-2024-07-19_hour-10.html,
+mdr,1 year (exactly),ca. 100-200 Songs,GET: https://www.mdr.de/scripts4/titellisten/xmlresp-index.do?output=json&idwelle={ID}&amount=1000&startdate=YYYYmmddHHMMSS,JSON,IDs:,,
+,,,,,1: mdr Jump,,No entries from 00:00-05:00
+,,,,,"2: mdr Aktuell (news, no music)",,
+,,,,,3: mdr Sputnik,,
+,,,,,4: mdr Sachsen,,
+,,,,,5: mdr Sachsen-Anhalt,,
+,,,,,6: mdr Thüringen,,
+,,,,,7: mdr Klassik,,
+,,,,,8: mdr Kultur,,
+,,,,,9: -,,
+,,,,,10: mdr Kultur Klassik im Konzert,,Storage duration: 1 day
+,,,,,11: -,,
+,,,,,12: mdr Jump In The Mix,,Storage duration: 1 day
+,,,,,13: mdr Jump Rock,,Storage duration: 1 day
+,,,,,14: mdr Jump Trend,,Storage duration: 1 day
+,,,,,15: mdr Sputnik Black,,Storage duration: 1 day
+,,,,,16: mdr Sputnik Club,,No entries
+,,,,,17: mdr Sputnik Firstplay,,Storage duration: 1 day
+,,,,,18: mdr Sputnik Popkult,,Storage duration: 1 day
+,,,,,19: mdr Sputnik Roboton,,Storage duration: 2 days
+,,,,,20: mdr Sputnik Rock,,No entries
+,,,,,21: mdr Sputnik Soundcheck,,Storage duration: 1 day
+,,,,,22: mdr Schlagerwelt,,
+,,,,,23: mdr Tweens,,
+,,,,,24: ARD Hitnacht,,Multiple stations play the same music
+WDR,Since 13.9.2023,1 hour,POST with form content: playlistSearch_date=YYYY-mm-dd&playlistSearch_hours=HH&playlistSearch_minutes=MM&submit=suchen,HTML,1live,https://www1.wdr.de/radio/1live/musik/playlist/index.jsp#searchPlaylistResult,
+,,,,,1live DIGGI,https://www1.wdr.de/radio/1live-diggi/onair/1live-diggi-playlist/index.jsp#searchPlaylistResult,
+,,,,,WDR2,https://www1.wdr.de/radio/wdr2/musik/playlist/index.jsp#searchPlaylistResult,
+,,,,,WDR3,https://www1.wdr.de/radio/wdr3/titelsuche-wdrdrei-104.jsp#searchPlaylistResult,Classical (more metadata)
+,,,,,WDR4,https://www1.wdr.de/radio/wdr4/titelsuche-wdrvier-102.jsp#searchPlaylistResult,
+,,,,,WDR5,https://www1.wdr.de/radio/wdr5/musik/titelsuche-wdrfuenf-104.jsp#searchPlaylistResult,
+,,,,,COSMO,https://www1.wdr.de/radio/cosmo/musik/playlist/index.jsp#searchPlaylistResult,
+SWR,90 days (exactly),1 hour,GET with date and hour in address,HTML,SWR1 BW,https://www.swr.de/swr1/bw/playlist/index.html?swx_date=2024-04-20&swx_time=14%3A00,Same music
+,,,,,SWR1 RP,https://www.swr.de/swr1/rp/programm/musikrecherche-swr1-rp-detail-100.html?swx_date=2024-04-20&swx_time=14%3A00,
+,,,,,SWR3,https://www.swr3.de/playlisten/index.html?swx_date=2024-04-20&swx_time=15%3A00,
+,,,,,SWR4,https://www.swr.de/swr4/musik/musikrecherche-s-bw-102.html?swx_date=2024-04-20&swx_time=15%3A00,
+,,,,,DASDING,https://www.dasding.de/03-playlistsuche/index.html?swx_date=2024-04-20&swx_time=15%3A00,
+SR,3 days (rounded down to 00:00),1 hour,"GET with relative day selection (0 for today, 1 for yesterday etc.) and hour in address",HTML,SR1,https://musikrecherche.sr.de/sr1/musicresearch.php?DateSelect=0&TimeSelect=15,
+,13 days (rounded down to 00:00),,,,SR2 KulturRadio,https://musikrecherche.sr.de/sr2sophora/musicresearch.php?DateSelect=0&TimeSelect=15,
+,3 days (rounded down to 00:00),,,,SR3,https://musikrecherche.sr.de/sr3sophora/musicresearch.php,
+BR,31 days (rounded down to 00:00),1 hour,POST with form content: date=dd.mm.YYYY&hour=HH,HTML,BR1,https://www.br.de/radio/bayern-1/welle110~playlist.html,
+,,,,,BR2,https://www.br.de/radio/bayern2/welle106~playlist.html,
+,,,,,BR3,https://www.br.de/radio/bayern-3/bayern-3-100~playlist.html,
+,,,,,PULS,https://www.br.de/puls/welle116~playlist.html,
+,,,,,BR Schlager,https://www.br.de/radio/br-schlager/welle118~playlist.html,
+,,,,,BR Heimat,https://www.br.de/radio/br-heimat/welle128~playlist.html,
+RBB,Since 01.05.2025 (rounded down),1 hour,POST with form content: datum=YYYY-mm-dd&zeit=HH%3AMM%3ASS,HTML,rbb 88.8,https://playlisten.rbb-online.de/rbb888/main/anzeige.php,
+,Since 01.05.2025 (rounded down),,,,rbb Antenne Brandenburg,https://playlisten.rbb-online.de/antenne_brandenburg/main/anzeige.php,
+,Since 01.01.2019 (rounded down),Multiple hours,"Access link to list of playlists, then download all links from there",,fritz,https://www.fritz.de/programm/sendungen/playlists/index.htm/from=01-11-2018_00-00/module=playlistfinder/to=20-07-2024_00-00.html,
+,Since 21.03.2022 (rounded down),,,,radioeins,https://www.radioeins.de/musik/playlists.htm/from=01-01-2022_00-00/module=playlistfinder/to=20-07-2024_00-00.html,
+,Since 01.01.2023 (rounded down),,,,radio3,https://www.radiodrei.de/musik/musiklisten/index.htm/from=01-01-2023_00-00/module=playlistfinder/to=20-07-2024_00-00.html,
+radiobremen,Since 24.06.2023 (rounded down),10 Songs,GET with date and hour in address,HTML,Bremen Eins,https://www.bremeneins.de/suche/titelsuche-110~ajax.html?playlistsearch-searchDate=2022-12-24&playlistsearch-searchTime=14%3A00,
+,,,,,Bremen Zwei,https://www.bremenzwei.de/musik/titelsuche-106~ajax.html?playlistsearch-searchDate=2022-12-24&playlistsearch-searchTime=14%3A40,
+,,,,,Bremen Vier,https://www.bremenvier.de/titelsuche-102~ajax.html?playlistsearch-searchDate=2022-12-24&playlistsearch-searchTime=13%3A45,
+,,,,,Bremen NEXT,https://www.bremennext.de/suche/titelsuche-118~ajax.html?playlistsearch-searchDate=2022-12-24&playlistsearch-searchTime=13%3A45,
