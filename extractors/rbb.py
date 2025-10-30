@@ -8,20 +8,21 @@ from extractors.playlist_extractor import PlaylistExtractor
 
 
 class RbbExtractor(PlaylistExtractor):
+    broadcaster = 'rbb'
+    oldest_timestamp = {'888': pd.Timestamp(2025, 5, 1),
+                        'antenne-brandenburg': pd.Timestamp(2025, 5, 1),
+                        'fritz': pd.Timestamp(2019, 1, 1),
+                        'radioeins': pd.Timestamp(2022, 3, 21),
+                        'radiodrei': pd.Timestamp(2023, 1, 1)}
+    stations = {'888': 'rbb888',
+                'antenne-brandenburg': 'antenne_brandenburg',
+                'fritz': 'https://www.fritz.de/programm/sendungen/playlists/index.htm/',
+                'radioeins': 'https://www.radioeins.de/musik/playlists.htm/',
+                'radiodrei': 'https://www.radiodrei.de/musik/musiklisten/index.htm/'}
+
     def __init__(self, log=True, sleep_secs=1):
         super().__init__(log, sleep_secs)
         self.times = None
-        self.broadcaster = 'rbb'
-        self.oldest_timestamp = {'888': pd.Timestamp(2025, 5, 1),
-                                 'antenne-brandenburg': pd.Timestamp(2025, 5, 1),
-                                 'fritz': pd.Timestamp(2019, 1, 1),
-                                 'radioeins': pd.Timestamp(2022, 3, 21),
-                                 'radiodrei': pd.Timestamp(2023, 1, 1)}
-        self.stations = {'888': 'rbb888',
-                         'antenne-brandenburg': 'antenne_brandenburg',
-                         'fritz': 'https://www.fritz.de/programm/sendungen/playlists/index.htm/',
-                         'radioeins': 'https://www.radioeins.de/musik/playlists.htm/',
-                         'radiodrei': 'https://www.radiodrei.de/musik/musiklisten/index.htm/'}
 
     def get_times(self, start, end, station) -> pd.DatetimeIndex:
         log_extra = {'station': station}
@@ -131,7 +132,8 @@ class RbbExtractor(PlaylistExtractor):
             for row in playlist.find_all('tr'):
                 if 'play_track' in row['class']:
                     play_time = pd.to_datetime(row.find(class_='play_time').text, format='%H:%M')
-                    times.append(date.strftime('%Y%m%d') + ' ' + (play_time.strftime('%H%M%S') if pd.notna(play_time) else playlist_time.strftime('%H%M%S')))
+                    times.append(date.strftime('%Y%m%d') + ' ' + (
+                        play_time.strftime('%H%M%S') if pd.notna(play_time) else playlist_time.strftime('%H%M%S')))
 
                     title = row.find('span', class_='tracktitle')
                     titles.append(title.text if title else '')

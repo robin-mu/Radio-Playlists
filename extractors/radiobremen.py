@@ -1,3 +1,5 @@
+from collections.abc import Iterable
+
 import pandas as pd
 import os
 
@@ -5,26 +7,29 @@ from extractors.playlist_extractor import PlaylistExtractor
 
 
 class RadiobremenExtractor(PlaylistExtractor):
+    broadcaster = 'radiobremen'
+    oldest_timestamp = pd.Timestamp(2023, 6, 24)
+    stations = {'bremeneins': 'https://www.bremeneins.de/suche/titelsuche-110~ajax.html',
+                'bremenzwei': 'https://www.bremenzwei.de/musik/titelsuche-106~ajax.html',
+                'bremenvier': 'https://www.bremenvier.de/titelsuche-102~ajax.html',
+                'bremennext': 'https://www.bremennext.de/suche/titelsuche-118~ajax.html'}
+
     def __init__(self, log=True, sleep_secs=1):
         super().__init__(log, sleep_secs)
-        self.broadcaster = 'radiobremen'
-        self.oldest_timestamp = pd.Timestamp(2023, 6, 24)
-        self.stations = {'bremeneins': 'https://www.bremeneins.de/suche/titelsuche-110~ajax.html',
-                         'bremenzwei': 'https://www.bremenzwei.de/musik/titelsuche-106~ajax.html',
-                         'bremenvier': 'https://www.bremenvier.de/titelsuche-102~ajax.html',
-                         'bremennext': 'https://www.bremennext.de/suche/titelsuche-118~ajax.html'}
 
         self.last_timestamp = None
 
-    def get_times(self, start, end, station) -> pd.DatetimeIndex:
-        self.last_timestamp = end
+    def get_times(self, start: pd.Timestamp, end: pd.Timestamp, station: str) -> Iterable[pd.Timestamp]:
+        self.last_timestamp: pd.Timestamp = end
         while self.last_timestamp > start:
             yield self.last_timestamp
 
-            filepath = os.path.join('raw', f'{self.broadcaster}_{station}_{self.last_timestamp.strftime("%Y%m%d-%H%M%S")}.{self.file_extension}')
+            filepath = os.path.join('raw',
+                                    f'{self.broadcaster}_{station}_{self.last_timestamp.strftime("%Y%m%d-%H%M%S")}.{self.file_extension}')
             try:
                 songs = pd.read_html(filepath)[0]
-                last_entry_datetime = pd.to_datetime(self.last_timestamp.strftime('%Y%m%d') + ' ' + songs.iloc[-1]['Uhrzeit'], format='%Y%m%d %H:%M')
+                last_entry_datetime: pd.Timestamp = pd.to_datetime(
+                    self.last_timestamp.strftime('%Y%m%d') + ' ' + songs.iloc[-1]['Uhrzeit'], format='%Y%m%d %H:%M')
                 request_time = self.last_timestamp.time()
                 last_entry_time = last_entry_datetime.time()
 
@@ -39,7 +44,6 @@ class RadiobremenExtractor(PlaylistExtractor):
 
             except ValueError:
                 self.last_timestamp -= pd.Timedelta(hours=1)
-
 
     def get_url(self, station: str, time):
         date = time.strftime('%Y-%m-%d')
@@ -56,7 +60,8 @@ class RadiobremenExtractor(PlaylistExtractor):
             df['time'] = pd.to_datetime(date.strftime('%Y%m%d') + ' ' + df['time'], format='%Y%m%d %H:%M')
 
             request_time = date.time()
-            df['time'] = df['time'].apply(lambda time: time if time.time() <= request_time else time - pd.Timedelta(days=1))
+            df['time'] = df['time'].apply(
+                lambda time: time if time.time() <= request_time else time - pd.Timedelta(days=1))
             df.set_index('time', inplace=True)
 
             return df

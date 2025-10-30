@@ -5,13 +5,14 @@ from extractors.playlist_extractor import PlaylistExtractor
 
 
 class SrExtractor(PlaylistExtractor):
+    broadcaster = 'sr'
+    oldest_timestamp = {'sr1': pd.Timedelta(days=3),
+                        'sr2': pd.Timedelta(days=13),
+                        'sr3': pd.Timedelta(days=3)}
+    stations = ['sr1', 'sr2', 'sr3']
+
     def __init__(self, log=True, sleep_secs=1):
         super().__init__(log, sleep_secs)
-        self.broadcaster = 'sr'
-        self.oldest_timestamp = {'sr1': pd.Timedelta(days=3),
-                                 'sr2': pd.Timedelta(days=13),
-                                 'sr3': pd.Timedelta(days=3)}
-        self.stations = ['sr1', 'sr2', 'sr3']
 
     def get_times(self, start, end, station) -> pd.DatetimeIndex:
         return pd.date_range(start, end, freq='1h')
@@ -41,7 +42,7 @@ class SrExtractor(PlaylistExtractor):
                 'artist': artist,
                 'title': title
             }, index=pd.Series(data=pd.to_datetime(time, format='%Y%m%d %H:%M'), name='time'),
-               dtype=str)
+                dtype=str)
         else:
             df = pd.DataFrame()
             for time, content in zip(soup.find_all(class_='musicResearch__Item__Time'),

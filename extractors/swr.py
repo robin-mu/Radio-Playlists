@@ -5,14 +5,15 @@ from extractors.playlist_extractor import PlaylistExtractor
 
 
 class SwrExtractor(PlaylistExtractor):
+    broadcaster = 'swr'
+    oldest_timestamp = pd.Timedelta(days=90)
+    stations = {'swr1': 'https://www.swr.de/swr1/bw/playlist/index.html',
+                'swr3': 'https://www.swr3.de/playlisten/index.html',
+                'swr4': 'https://www.swr.de/swr4/musik/musikrecherche-s-bw-102.html',
+                'dasding': 'https://www.dasding.de/03-playlistsuche/index.html'}
+
     def __init__(self, log=True, sleep_secs=1):
         super().__init__(log, sleep_secs)
-        self.broadcaster = 'swr'
-        self.oldest_timestamp = pd.Timedelta(days=90)
-        self.stations = {'swr1': 'https://www.swr.de/swr1/bw/playlist/index.html',
-                         'swr3': 'https://www.swr3.de/playlisten/index.html',
-                         'swr4': 'https://www.swr.de/swr4/musik/musikrecherche-s-bw-102.html',
-                         'dasding': 'https://www.dasding.de/03-playlistsuche/index.html'}
 
     def get_times(self, start, end, station) -> pd.DatetimeIndex:
         return pd.date_range(start, end, freq='1h')
@@ -35,7 +36,8 @@ class SwrExtractor(PlaylistExtractor):
         df = pd.DataFrame({
             'title': [e.text.strip() for e in soup.find_all('dd', class_='playlist-item-song')],
             'artist': [e.text.strip() for e in soup.find_all('dd', class_='playlist-item-artist')]
-        }, index=pd.Series(data=pd.to_datetime([e['datetime'] for e in soup.find_all('time')], format='%Y-%m-%dT%H:%M'), name='time'),
-           dtype=str)
+        }, index=pd.Series(data=pd.to_datetime([e['datetime'] for e in soup.find_all('time')], format='%Y-%m-%dT%H:%M'),
+                           name='time'),
+            dtype=str)
 
         return df

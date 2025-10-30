@@ -5,16 +5,17 @@ from extractors.playlist_extractor import PlaylistExtractor
 
 
 class BrExtractor(PlaylistExtractor):
+    broadcaster = 'br'
+    oldest_timestamp = pd.Timedelta(days=31)
+    stations = {'br1': 'radio/bayern-1/welle110',
+                'br2': 'radio/bayern2/welle106',
+                'br3': 'radio/bayern-3/bayern-3-100',
+                'puls': 'puls/welle116',
+                'br-schlager': 'radio/br-schlager/welle118',
+                'br-heimat': 'radio/br-heimat/welle128'}
+
     def __init__(self, log=True, sleep_secs=1):
         super().__init__(log, sleep_secs)
-        self.broadcaster = 'br'
-        self.oldest_timestamp = pd.Timedelta(days=31)
-        self.stations = {'br1': 'radio/bayern-1/welle110',
-                         'br2': 'radio/bayern2/welle106',
-                         'br3': 'radio/bayern-3/bayern-3-100',
-                         'puls': 'puls/welle116',
-                         'br-schlager': 'radio/br-schlager/welle118',
-                         'br-heimat': 'radio/br-heimat/welle128'}
 
     def get_times(self, start, end, station) -> pd.DatetimeIndex:
         return pd.date_range(start, end, freq='1h')

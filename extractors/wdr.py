@@ -6,17 +6,18 @@ from extractors.playlist_extractor import PlaylistExtractor
 
 
 class WdrExtractor(PlaylistExtractor):
+    broadcaster = 'wdr'
+    oldest_timestamp = pd.Timestamp(2023, 9, 13)
+    stations = {'1live': '1live/musik/playlist/index.jsp',
+                '1live-diggi': '1live-diggi/onair/1live-diggi-playlist/index.jsp',
+                'wdr2': 'wdr2/musik/playlist/index.jsp',
+                'wdr3': 'wdr3/titelsuche-wdrdrei-104.jsp',
+                'wdr4': 'wdr4/titelsuche-wdrvier-102.jsp',
+                'wdr5': 'wdr5/musik/titelsuche-wdrfuenf-104.jsp',
+                'cosmo': 'cosmo/musik/playlist/index.jsp'}
+
     def __init__(self, log=True, sleep_secs=1):
         super().__init__(log, sleep_secs)
-        self.broadcaster = 'wdr'
-        self.oldest_timestamp = pd.Timestamp(2023, 9, 13)
-        self.stations = {'1live': '1live/musik/playlist/index.jsp',
-                         '1live-diggi': '1live-diggi/onair/1live-diggi-playlist/index.jsp',
-                         'wdr2': 'wdr2/musik/playlist/index.jsp',
-                         'wdr3': 'wdr3/titelsuche-wdrdrei-104.jsp',
-                         'wdr4': 'wdr4/titelsuche-wdrvier-102.jsp',
-                         'wdr5': 'wdr5/musik/titelsuche-wdrfuenf-104.jsp',
-                         'cosmo': 'cosmo/musik/playlist/index.jsp'}
 
     def get_times(self, start, end, station) -> pd.DatetimeIndex:
         return pd.date_range(start, end, freq='1h')
@@ -61,8 +62,11 @@ class WdrExtractor(PlaylistExtractor):
                     values = [s.strip().replace('\n', '; ') for s in re.split(pattern, el.text.strip())[1:]]
 
                     if len(cols) != len(values):
-                        self.logger.warning(f'{date}: Length of columns ({len(cols)}) and values ({len(values)}) is not equal', extra=log_extra)
+                        self.logger.warning(
+                            f'{date}: Length of columns ({len(cols)}) and values ({len(values)}) is not equal',
+                            extra=log_extra)
 
-                    df = df.combine_first(pd.DataFrame(dict(zip(cols, values)), index=pd.Series(df.index[i], name='time')))
+                    df = df.combine_first(
+                        pd.DataFrame(dict(zip(cols, values)), index=pd.Series(df.index[i], name='time')))
 
         return df
