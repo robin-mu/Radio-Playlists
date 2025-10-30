@@ -40,9 +40,9 @@ class PlaylistExtractor(ABC):
         self.sleep_secs: int = sleep_secs
         self.session = requests.Session()
         self.session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                                               'AppleWebKit/537.36 (KHTML, like Gecko) '
-                                               'Chrome/112.0.0.0 '
-                                               'Safari/537.36 OPR/98.0.0.0'})
+                                                   'AppleWebKit/537.36 (KHTML, like Gecko) '
+                                                   'Chrome/112.0.0.0 '
+                                                   'Safari/537.36 OPR/98.0.0.0'})
 
     @abstractmethod
     def get_times(self, start: pd.Timestamp, end: pd.Timestamp, station: str) -> Iterable[pd.Timestamp]:
@@ -84,7 +84,8 @@ class PlaylistExtractor(ABC):
         log_extra = {'station': station}
 
         progress_bar = progress_bar or tqdm(desc=f'{self.broadcaster}: {station}', file=sys.stdout,
-                                            total=(end - start) // pd.Timedelta(minutes=1), unit='h', unit_scale=60, leave=False,
+                                            total=(end - start) // pd.Timedelta(minutes=1), unit='h', unit_scale=60,
+                                            leave=False,
                                             bar_format="{desc:<20.20}{percentage:3.0f}%|{bar:40}{r_bar}")
 
         # Downloading
@@ -92,7 +93,8 @@ class PlaylistExtractor(ABC):
 
         present_files = glob.glob(f'raw/{self.broadcaster}_{station}_*')
         if present_files:
-            newest_date = pd.to_datetime(max(present_files).split('_')[-1].split('.')[0], format='%Y%m%d-%H%M%S').floor('1d') - pd.Timedelta(days=1)
+            newest_date = pd.to_datetime(max(present_files).split('_')[-1].split('.')[0], format='%Y%m%d-%H%M%S').floor(
+                '1d') - pd.Timedelta(days=1)
         else:
             newest_date = pd.Timestamp.now()
 
@@ -101,7 +103,8 @@ class PlaylistExtractor(ABC):
             if prev_t is None:
                 prev_t = t
 
-            filepath = os.path.join('raw', f'{self.broadcaster}_{station}_{t.strftime("%Y%m%d-%H%M%S")}.{self.file_extension}')
+            filepath = os.path.join('raw',
+                                    f'{self.broadcaster}_{station}_{t.strftime("%Y%m%d-%H%M%S")}.{self.file_extension}')
             if os.path.isfile(filepath) and t < newest_date:
                 status_msg = f'File for {t} is already present at {filepath}'
             else:
@@ -144,9 +147,9 @@ class PlaylistExtractor(ABC):
 
         return pd.concat(pages)
 
-    def update_databases(self, stations: list[str] | None=None):
+    def update_databases(self, stations: list[str] | None = None):
         stations = stations or self.stations
-        with tqdm(file=sys.stdout, leave=False, unit='h', unit_scale=1/60,
+        with tqdm(file=sys.stdout, leave=False, unit='h', unit_scale=1 / 60,
                   bar_format='{desc:<30.30}{percentage:3.0f}%|{bar:40}{r_bar}') as pbar:
             time_ranges = {}  # precalculate start and end time for each station for correct progress bar
             for station in stations:

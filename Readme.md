@@ -1,6 +1,15 @@
 # Radio Playlists
 A library for extracting playlist data (which song was played at which time) for various radio stations.
 
+# Installation
+```shell
+git clone git@github.com:robin-mu/Radio-Playlists.git
+cd Radio-Playlists
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
 # Usage
 Execute `update_all.py` to create databases for all radio broadcasters which have a class in the `extractors` folder.  
 To create a database for all stations of a single broadcaster, import and instantiate the class corresponding to the broadcaster and run the `update_databases` method. You can optionally specify which stations should be downloaded, passing no arguments will download all stations.  
@@ -12,7 +21,7 @@ If you want to add a broadcaster, you need to [fork](https://github.com/robin-mu
 - `stations`: List of station names this broadcaster manages, or dictionary with station names as keys and anything you need for extraction (e.g. urls) as values
 - `oldest_timestamp`: The oldest time for which playlist data is accessible. This can be a 
   - `pd.Timestamp` if a broadcaster saves playlist data starting from a fixed date
-  - `pd.Timedelta` if a broadcaster deletes playlist data older than some timedelta (e.g. `self.oldest_timestamp = pd.Timedelta(days=14)` if the broadcaster deletes playlist data older than two weeks)
+  - `pd.Timedelta` if a broadcaster deletes playlist data older than some timedelta (e.g. `oldest_timestamp = pd.Timedelta(days=14)` if the broadcaster deletes playlist data older than two weeks)
   - Dictionary with station names as keys and `pd.Timestamp` or `pd.Timedelta` as values if the oldest time is different for each station
 - If this broadcaster uses a different file extension than html (e.g. json), you can optionally define a `file_extension` attribute
 
@@ -23,6 +32,8 @@ This method can also be a generator which calculates and yields the next timesta
 - `extract(self, station: str, document: bytes, time) -> pd.DataFrame`: Extracts the playlist information from the downloaded document (html, json, etc.) and puts it into a DataFrame. The index of the DataFrame has to be the timestamp for each song. 
 
 For logging, you can use the logger object `self.logger` which is defined in the `PlaylistExtractor` base class. If the name of the station should show up in log messages, you have to add `log_extra={'station': '{your_station}'}` for each logging call.
+
+If you finished writing and testing your class, you can make a [pull request](https://help.github.com/articles/creating-a-pull-request) to have it added into this repository. Thanks for your contribution!
 
 # Dependencies
 - requests: For HTTP requests
