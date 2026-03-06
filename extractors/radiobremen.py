@@ -28,7 +28,7 @@ class RadiobremenExtractor(PlaylistExtractor):
             filepath = os.path.join('raw',
                                     f'{self.broadcaster}_{station}_{self.last_timestamp.strftime("%Y%m%d-%H%M%S")}.{self.file_extension}')
             try:
-                songs = pd.read_html(filepath)[0]
+                songs = pd.read_html(filepath, flavor='lxml')[0]
                 last_entry_datetime: pd.Timestamp = pd.to_datetime(
                     self.last_timestamp.strftime('%Y%m%d') + ' ' + songs.iloc[-1]['Uhrzeit'], format='%Y%m%d %H:%M')
                 request_time = self.last_timestamp.time()
@@ -56,7 +56,7 @@ class RadiobremenExtractor(PlaylistExtractor):
         log_extra = {'station': station}
 
         try:
-            df = pd.read_html(io.StringIO(str(document)))[0]
+            df = pd.read_html(io.StringIO(str(document)), flavor='lxml')[0]
             df.rename(columns={'Uhrzeit': 'time', 'Interpret': 'artist', 'Titel': 'title'}, inplace=True)
             df['time'] = pd.to_datetime(date.strftime('%Y%m%d') + ' ' + df['time'], format='%Y%m%d %H:%M')
 
