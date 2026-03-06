@@ -47,7 +47,7 @@ class NdrExtractor(PlaylistExtractor):
                       'Ensembles': 'Ensemble',
                       'Solisten': 'Solist'}
 
-            for p in soup.find_all(class_='program'):
+            for p in soup.find_all(class_='titlelistentry'):
                 keys = [i.text if len(i.find_all()) == 0 else i.find_all()[0].text for i in
                         p.find_all(class_='additionalinfo--key')]
                 keys = [plural[i] if i in plural else i for i in keys]
