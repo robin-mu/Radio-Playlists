@@ -37,7 +37,8 @@ If you finished writing and testing your class, you can make a [pull request](ht
 
 # Dependencies
 - requests: For HTTP requests
-- beautifulsoup4: For extracting playlist information from html files
+- beautifulsoup4: For extracting playlist information from HTML files
 - pandas: For managing playlist databases
+  - lxml: for reading HTML tables as pandas dataframes
 - tqdm: For pretty progress bars
 - wakepy: To keep the system awake while updating (OS independent)
