@@ -5,8 +5,8 @@ A library for extracting playlist data (which song was played at which time) for
 ```shell
 git clone git@github.com:robin-mu/Radio-Playlists.git
 cd Radio-Playlists
-python -m venv venv
-source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
