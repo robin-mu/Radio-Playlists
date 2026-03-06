@@ -78,10 +78,9 @@ class RbbExtractor(PlaylistExtractor):
         log_extra = {'station': station}
 
         if station in ['888', 'antenne-brandenburg']:
-            df = pd.read_html(io.StringIO(str(document)))[0]
+            df = pd.read_html(io.StringIO(document.decode()), flavor='lxml')[0]
 
-            if df.loc[
-                0, 'Datum'] == 'Es liegen uns für den gew%auml;hlten Zeitraum keine Einträge vor. Bitte verändern Sie Ihre Suchanfrage.':
+            if 'Bitte verändern Sie Ihre Suchanfrage.' in df.loc[0, 'Datum']:
                 self.logger.warning(f'No playlist data found for {date}', extra=log_extra)
                 return pd.DataFrame()
 
@@ -96,7 +95,7 @@ class RbbExtractor(PlaylistExtractor):
             return pd.DataFrame()
 
         if station == 'fritz':
-            df = pd.read_html(StringIO(str(playlist)))[0][['Zeit', 'Künstler.1', 'Titel']]
+            df = pd.read_html(StringIO(str(playlist)), flavor='lxml')[0][['Zeit', 'Künstler.1', 'Titel']]
             if all(df['Künstler.1'].isna()):
                 self.logger.warning(f'No artists found for {date}', extra=log_extra)
 
