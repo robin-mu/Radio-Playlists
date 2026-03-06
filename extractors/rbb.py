@@ -1,3 +1,4 @@
+import io
 import time
 
 import pandas as pd
@@ -77,7 +78,7 @@ class RbbExtractor(PlaylistExtractor):
         log_extra = {'station': station}
 
         if station in ['888', 'antenne-brandenburg']:
-            df = pd.read_html(document)[0]
+            df = pd.read_html(io.StringIO(str(document)))[0]
 
             if df.loc[
                 0, 'Datum'] == 'Es liegen uns für den gew%auml;hlten Zeitraum keine Einträge vor. Bitte verändern Sie Ihre Suchanfrage.':

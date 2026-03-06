@@ -1,3 +1,4 @@
+import io
 from collections.abc import Iterable
 
 import pandas as pd
@@ -55,7 +56,7 @@ class RadiobremenExtractor(PlaylistExtractor):
         log_extra = {'station': station}
 
         try:
-            df = pd.read_html(document)[0]
+            df = pd.read_html(io.StringIO(str(document)))[0]
             df.rename(columns={'Uhrzeit': 'time', 'Interpret': 'artist', 'Titel': 'title'}, inplace=True)
             df['time'] = pd.to_datetime(date.strftime('%Y%m%d') + ' ' + df['time'], format='%Y%m%d %H:%M')
 
