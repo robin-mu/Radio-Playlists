@@ -56,7 +56,6 @@ SR,3 days (rounded down to 00:00),1 hour,"GET with relative day selection (0 for
 BR,31 days (rounded down to 00:00),1 hour,POST with form content: date=dd.mm.YYYY&hour=HH,HTML,BR1,https://www.br.de/radio/bayern-1/welle110~playlist.html,
 ,,,,,BR2,https://www.br.de/radio/bayern2/welle106~playlist.html,
 ,,,,,BR3,https://www.br.de/radio/bayern-3/bayern-3-100~playlist.html,
-,,,,,PULS,https://www.br.de/puls/welle116~playlist.html,
 ,,,,,BR Schlager,https://www.br.de/radio/br-schlager/welle118~playlist.html,
 ,,,,,BR Heimat,https://www.br.de/radio/br-heimat/welle128~playlist.html,
 RBB,Since 01.05.2025 (rounded down),1 hour,POST with form content: datum=YYYY-mm-dd&zeit=HH%3AMM%3ASS,HTML,rbb 88.8,https://playlisten.rbb-online.de/rbb888/main/anzeige.php,

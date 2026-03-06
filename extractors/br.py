@@ -10,7 +10,6 @@ class BrExtractor(PlaylistExtractor):
     stations = {'br1': 'radio/bayern-1/welle110',
                 'br2': 'radio/bayern2/welle106',
                 'br3': 'radio/bayern-3/bayern-3-100',
-                'puls': 'puls/welle116',
                 'br-schlager': 'radio/br-schlager/welle118',
                 'br-heimat': 'radio/br-heimat/welle128'}
 
