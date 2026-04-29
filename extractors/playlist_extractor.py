@@ -94,7 +94,7 @@ class PlaylistExtractor(ABC):
         present_files = glob.glob(f'raw/{self.broadcaster}_{station}_*')
         if present_files:
             newest_date = pd.to_datetime(max(present_files).split('_')[-1].split('.')[0], format='%Y%m%d-%H%M%S').floor(
-                '1d') - pd.Timedelta(days=1)
+                '1D') - pd.Timedelta(days=1)
         else:
             newest_date = pd.Timestamp.now()
 
@@ -169,8 +169,8 @@ class PlaylistExtractor(ABC):
                 if not df.empty:
                     start = max(start, df.iloc[-1].name)
 
-                start = start.floor('1d')
-                end = pd.Timestamp.now().ceil('1d')
+                start = start.floor('1D')
+                end = pd.Timestamp.now().ceil('1D')
 
                 if start > end:
                     raise ValueError(f'{station}: End time is later than start time')
